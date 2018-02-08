@@ -1,0 +1,59 @@
+<aura:component access="GLOBAL" 
+				controller="LookupSObjectController"
+				implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome"
+				>
+
+	<!--Attributes-->
+	<aura:attribute name="searchString" type="String" description="The string that will be searched on the object's name field, the WHERE Name LIKE..."/>
+	<aura:attribute name="sObjectAPIName" type="String" required="true" description="The API name of the object that should be searched, the FROM parameter of the query"/>
+	<aura:attribute name="pluralLabel" type="String"  required="true" description="Plural label for what is being searched"/>
+	<aura:attribute name="results" type="LookupSObjectController.SearchResult[]" description="Results returned from the query"/>
+	<aura:attribute name="selectedId" type="String" description="The record Id for the selected record"/>
+	<aura:attribute name="selectedLabel" type="String"  description="the name of the selected record"/>
+	<aura:attribute name="selectedObject" type="Object"  description="the object version of the selected version, should at minimum contain Id and name"/>
+	<aura:attribute name="placeholder" type="String" description="what the user will see until the search or select a record"/>
+	<aura:attribute name="field" type="String" required="true" description="the field that the selection writes back to"/>
+	<aura:attribute name="recordId" type="String" required="true" description="the record id of the record the selection writes back to"/>
+	<aura:attribute name="whereClause" type="String" description="do not include the starting AND, will follow the Name LIKE..., ignored if nothing is passed"/>
+
+	<!--Handler-->
+	<aura:handler name="init" value="{!this}" action="{!c.init}"/>
+	<aura:handler name="change" value="{!v.selectedObject}" action="{!c.selectedObjectChange}"/>
+
+	<!--Events-->
+	<aura:registerEvent name="updateLookupEvent" type="c:updateLookup"/>
+
+	<div aura:id="lookup-div" class="slds-lookup" data-select="single" data-scope="single" data-typeahead="true" onmouseout="{!c.hideList}">
+		<!-- This is the Input form markup -->
+		<div class="slds-form-element">
+			<div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
+			<!-- This markup is for when an item is currently selected -->
+			<div aura:id="lookup-pill" class="slds-pill-container slds-hide">
+				<span class="slds-pill slds-pill--bare">
+					<span class="slds-pill__label">
+						{!v.selectedLabel}
+					</span>
+					<button class="slds-button slds-button-icon" onclick="{!c.clear}">
+						<lightning:icon iconName="utility:close" size="x-small" alternativeText="Remove" class="slds-button__icon"/>
+					</button>
+				</span>
+			</div>
+			<!-- This markup is for when searching for a string -->
+			<i><ui:inputText aura:id="lookup" value="{!v.searchString}" class="slds-input" updateOn="keyup" keyup="{!c.search}" placeholder="{!v.placeholder}"/></i>
+		 
+			</div>
+		
+		<!-- This is the lookup list markup. Initially it's hidden -->
+		<div aura:id="lookuplist" class="slds-lookup__menu" role="listbox">
+			<ul aura:id="lookuplist-items" class="slds-lookup__list" role="presentation">
+				<aura:iteration items="{!v.results}" var="match">
+			    	<li class="slds-lookup__item">
+						<a id="{!globalId + '_id_' + match.SObjectId}" href="javascript:void(0);" role="option" onclick="{!c.select}">
+							{!match.SObjectLabel}
+						</a>
+					</li>
+				</aura:iteration>
+			</ul>
+		</div></div>
+	</div>
+</aura:component>
