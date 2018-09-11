@@ -12,3 +12,15 @@ Salesforce Lightning Component for lookup fields
   
 * LookupTable
   * An example of implementing the LookupField within aura:iteration
+  
+
+#Example of saving record with controller
+@AuraEnabled
+public static void save(String saveRecord)
+{
+   Contact contact = (Contact)JSON.deserialize(saveRecord, Contact.class);
+   //this is required, because you can either have AccountId or Account.Id populated but not both
+   contact.Account = null;
+
+   upsert contact;
+}
