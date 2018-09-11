@@ -35,6 +35,13 @@
 	},
 
 	/**
+	* shows the list if users clicks on field
+	**/
+	showList : function(component, event, helper){
+		helper.show(component, event);
+	},
+
+	/**
 	* handles changes to the selected Object if component loads
 	* before parent component has finished
 	*/

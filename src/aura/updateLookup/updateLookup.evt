@@ -1,1 +1,6 @@
-<aura:event type="APPLICATION" description="Event template" />
+<aura:event type="APPLICATION" description="Updates Generic Lookup Field" >
+	<aura:attribute type="String" name="recordId"> </aura:attribute>
+	<aura:attribute type="String" name="value"></aura:attribute> 
+	<aura:attribute type="String" name="label"></aura:attribute> 
+	<aura:attribute type="String" name="field"></aura:attribute>
+</aura:event>

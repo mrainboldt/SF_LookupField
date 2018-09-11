@@ -23,7 +23,8 @@
 	<!--Events-->
 	<aura:registerEvent name="updateLookupEvent" type="c:updateLookup"/>
 
-	<div aura:id="lookup-div" class="slds-lookup" data-select="single" data-scope="single" data-typeahead="true" onmouseout="{!c.hideList}">
+	<!--HTML-->
+	<div aura:id="lookup-div" class="slds-lookup" data-select="single" data-scope="single" data-typeahead="true" >
 		<!-- This is the Input form markup -->
 		<div class="slds-form-element">
 			<div class="slds-form-element__control slds-input-has-icon slds-input-has-icon--right">
@@ -39,21 +40,30 @@
 				</span>
 			</div>
 			<!-- This markup is for when searching for a string -->
-			<i><ui:inputText aura:id="lookup" value="{!v.searchString}" class="slds-input" updateOn="keyup" keyup="{!c.search}" placeholder="{!v.placeholder}"/></i>
+			<i onfocus="{!c.showList}" onclick="{!c.showList}">
+				<ui:inputText aura:id="lookup" 
+							value="{!v.searchString}" 
+							class="slds-input" 
+							updateOn="keyup" 
+							keyup="{!c.search}" 
+							placeholder="{!v.placeholder}"
+							/>
+			</i>
 		 
 			</div>
 		
-		<!-- This is the lookup list markup. Initially it's hidden -->
-		<div aura:id="lookuplist" class="slds-lookup__menu" role="listbox">
-			<ul aura:id="lookuplist-items" class="slds-lookup__list" role="presentation">
-				<aura:iteration items="{!v.results}" var="match">
-			    	<li class="slds-lookup__item">
-						<a id="{!globalId + '_id_' + match.SObjectId}" href="javascript:void(0);" role="option" onclick="{!c.select}">
-							{!match.SObjectLabel}
-						</a>
-					</li>
-				</aura:iteration>
-			</ul>
-		</div></div>
+			<!-- This is the lookup list markup. Initially it's hidden -->
+			<div aura:id="lookuplist" class="slds-lookup__menu slds-m-around__small" role="listbox" onmouseout="{!c.hideList}" onmouseover="{!c.showList}">
+				<ul aura:id="lookuplist-items" class="slds-lookup__list" role="presentation">
+					<aura:iteration items="{!v.results}" var="match">
+				    	<li class="slds-lookup__item">
+							<a id="{!globalId + '_id_' + match.SObjectId}" href="javascript:void(0);" role="option" onclick="{!c.select}">
+								{!match.SObjectLabel}
+							</a>
+						</li>
+					</aura:iteration>
+				</ul>
+			</div>
+		</div>
 	</div>
 </aura:component>

@@ -95,7 +95,7 @@
 		$A.enqueueAction(action);
 	},
  
-	doSelection : function(component, event) {
+	doSelection : function(component, event) {		
 		// Resolve the Object Id from the events Element Id (this will be the &amp;lt;a&amp;gt; tag)
 		var recId = this.getSelectedRecordId(event.currentTarget.id);
 		// The Object label is the 2nd child (index 1)
@@ -126,8 +126,17 @@
 		var inputElement = component.find('lookup-div');
 		$A.util.addClass(inputElement, 'slds-has-selection');
 
+		event.preventDefault();
 		// Create the ClearLookupId event
-		var updateEvent = component.getEvent("updateLookupEvent");
+		var updateEvent = component.getEvent('updateLookupEvent');
+		updateEvent.setParams(
+		{
+			'recordId' : component.get('v.recordId')
+			,'value' : recId
+			,'label' : recLabel
+			,'field' : component.get('v.field')
+		}
+		);
 
 		// Fire the event
 		updateEvent.fire();
@@ -135,8 +144,17 @@
 	},
 
 	clearSelection : function(component) {
+		event.preventDefault();
 		// Create the ClearLookupId event
 		var updateEvent = component.getEvent("updateLookupEvent");
+		updateEvent.setParams(
+		{
+			'recordId' : component.get('v.recordId')
+			,'value' : ''
+			,'label' : ''
+			,'field' : component.get('v.field')
+		}
+		);
 		component.set('v.selectedId', null);
 		component.set('v.selectedLabel', null);
 		component.set('v.selectedObject', null);
@@ -186,6 +204,12 @@
 		}else{ // otherwise throw an alert
 			alert(title + ': ' + message);
 		}
+	},
+
+	show : function(component, event)
+	{
+		var lookupList = component.find("lookuplist");
+		$A.util.addClass(lookupList, 'slds-show');
 	},
 
 	hide : function(component, event){
