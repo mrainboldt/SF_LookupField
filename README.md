@@ -14,9 +14,10 @@ Salesforce Lightning Component for lookup fields
   * An example of implementing the LookupField within aura:iteration
   
 
-#Example of saving record with controller
+# Example of saving record with controller
+```
 @AuraEnabled
-public static void save(String saveRecord)
+public static void save(String saveRecord)\r
 {
    Contact contact = (Contact)JSON.deserialize(saveRecord, Contact.class);
    //this is required, because you can either have AccountId or Account.Id populated but not both
@@ -24,3 +25,4 @@ public static void save(String saveRecord)
 
    upsert contact;
 }
+```
